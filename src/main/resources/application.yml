@@ -1,0 +1,9 @@
+spring:
+  application.name: jooq-practice
+  jooq:
+    sql-dialect: MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/sakila
+    username: dbId
+    password: dbPw
+    driverClassName: com.mysql.cj.jdbc.Driver

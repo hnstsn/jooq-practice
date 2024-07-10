@@ -34,7 +34,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
-
+	implementation 'org.projectlombok:lombok:1.18.26'
+	annotationProcessor 'org.projectlombok:lombok'
 
 	implementation ('org.springframework.boot:spring-boot-starter-jooq') {
 		exclude group: 'org.jooq'
@@ -48,14 +49,16 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
-String dbUser   = System.properties["db-user"]   ?: "db아이디입력"
-String dbPasswd = System.properties["db-passwd"] ?: "db비밀번호입력"
+String dbUser   = System.properties["db-user"]   ?: "dbId"
+String dbPasswd = System.properties["db-passwd"] ?: "dbPw"
 
 jooq {
 	version = "${jooqVersion}"
@@ -64,7 +67,7 @@ jooq {
 			generationTool {
 				jdbc {
 					driver = 'com.mysql.cj.jdbc.Driver'
-					url = 'jdbc:mysql://localhost:13306'
+					url = 'jdbc:mysql://localhost:3306'
 					user = "${dbUser}"
 					password = "${dbPasswd}"
 				}
