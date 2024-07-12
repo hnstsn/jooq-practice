@@ -1,22 +1,32 @@
-package com.example.jooqpractice.film;
+package com.example.jooqpractice.film.repository;
 
-import lombok.RequiredArgsConstructor;
+import com.example.jooqpractice.film.FilmWithActors;
+import com.example.jooqpractice.film.SimpleFilmInfo;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.generated.tables.JActor;
 import org.jooq.generated.tables.JFilm;
 import org.jooq.generated.tables.JFilmActor;
+import org.jooq.generated.tables.daos.FilmDao;
 import org.jooq.generated.tables.pojos.Film;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * 상속관계로 DAO 사용
+ */
 @Repository
-@RequiredArgsConstructor
-public class FilmRepository {
+public class FilmRepositoryIsA extends FilmDao {
 
     private final DSLContext dslContext;
     private final JFilm FILM = JFilm.FILM;
+
+    public FilmRepositoryIsA(Configuration configuration, DSLContext dslContext) {
+        super(configuration);
+        this.dslContext = dslContext;
+    }
 
     public Film findById(Long id) {
         return dslContext.select(FILM.fields())

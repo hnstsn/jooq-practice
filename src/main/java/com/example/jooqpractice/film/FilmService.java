@@ -1,5 +1,6 @@
 package com.example.jooqpractice.film;
 
+import com.example.jooqpractice.film.repository.FilmRepository;
 import com.example.web.response.FilmWithActorPagedResponse;
 import com.example.web.response.PagedResponse;
 import lombok.RequiredArgsConstructor;

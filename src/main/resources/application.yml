@@ -3,9 +3,9 @@ spring:
   jooq:
     sql-dialect: MySQL
   datasource:
-    url: jdbc:mysql://localhost:3306/sakila
-    username: dbId
-    password: dbPw
+    url: jdbc:mysql://localhost:13306/sakila
+    username: root
+    password: passwd
     driverClassName: com.mysql.cj.jdbc.Driver
 
 logging:
