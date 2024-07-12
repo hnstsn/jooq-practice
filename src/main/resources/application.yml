@@ -7,3 +7,7 @@ spring:
     username: dbId
     password: dbPw
     driverClassName: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    org.jooq.tools.LoggerListener: DEBUG

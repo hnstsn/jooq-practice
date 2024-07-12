@@ -42,9 +42,9 @@ public class FilmRepository {
                 )
                 .from(FILM)
                 .join(FILM_ACTOR)
-                .on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                    .on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
                 .join(ACTOR)
-                .on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                    .on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
                 .limit(pageSize)
                 .offset((page - 1) * pageSize)
                 .fetchInto(FilmWithActors.class);
