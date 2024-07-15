@@ -73,4 +73,34 @@ public class ActorConditionTest {
         Assertions.assertThat(actorList).hasSizeGreaterThan(1);
     }
 
+    @Test
+    @DisplayName("다중 조건 검색 - 배우 이름으로 조회")
+    void multiConditionTest1() {
+        // given
+        var searchOption = ActorFilmographySearchOption.builder()
+                .actorName("LOLLOBRIGIDA")
+                .build();
+        // when
+        List<ActorFilmography> actorFilmographies = actorRepository.findActorFilmography(searchOption);
+
+        // then
+        Assertions.assertThat(actorFilmographies).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("다중 조건 검색 - 배우 이름과 영화 제목으로 조회")
+    void multiConditionTest2() {
+        // given
+        var searchOption = ActorFilmographySearchOption.builder()
+                .actorName("LOLLOBRIGIDA")
+                .filmTitle("COMMANDMENTS EXPRESS")
+                .build();
+
+        // when
+        List<ActorFilmography> actorFilmographies = actorRepository.findActorFilmography(searchOption);
+
+        // then
+        Assertions.assertThat(actorFilmographies).hasSize(1);
+        Assertions.assertThat(actorFilmographies.get(0).getFilmList()).hasSize(1);
+    }
 }

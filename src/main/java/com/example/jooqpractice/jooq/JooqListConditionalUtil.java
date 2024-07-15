@@ -15,4 +15,5 @@ public class JooqListConditionalUtil {
         }
         return field.in(values);
     }
+
 }
