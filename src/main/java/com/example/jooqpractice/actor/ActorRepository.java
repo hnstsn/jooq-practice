@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.jooqpractice.jooq.JooqListConditionalUtil.inIfNotEmpty;
+import static com.example.jooqpractice.util.jooq.JooqListConditionUtil.inIfNotEmpty;
 import static org.jooq.generated.tables.JActor.ACTOR;
 
 

@@ -1,4 +1,4 @@
-package com.example.jooqpractice.jooq;
+package com.example.jooqpractice.util.jooq;
 
 import org.jooq.Condition;
 import org.jooq.Field;
@@ -7,7 +7,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-public class JooqListConditionalUtil {
+public class JooqListConditionUtil {
 
     public static <T> Condition inIfNotEmpty(Field<T> field, List<T> values) {
         if (CollectionUtils.isEmpty(values)) {

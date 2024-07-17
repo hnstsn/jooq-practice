@@ -1,5 +1,6 @@
 package com.example.jooqpractice.film.repository;
 
+import com.example.jooqpractice.config.converter.PriceCategoryConverter;
 import com.example.jooqpractice.film.FilmPriceSummary;
 import com.example.jooqpractice.film.FilmRentalSummary;
 import com.example.jooqpractice.film.FilmWithActors;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.example.jooqpractice.util.jooq.JooqStringConditionUtils.containsIfNotBlank;
 import static org.jooq.impl.DSL.*;
 
 /**
@@ -75,7 +77,10 @@ public class FilmRepositoryHasA {
                     case_().when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(1.0)), "Cheap")
                            .when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(3.0)), "Moderate")
                            .else_("Expensive")
-                           .as("price_category"),
+                           .as("price_category")
+//                           .convertTo(FilmPriceSummary.PriceCategory.class, FilmPriceSummary.PriceCategory::getCode)  // 이렇게 해도 되는데 아래가 가독성이 더 좋음
+                           .convert(new PriceCategoryConverter()),      // 추가
+
                     selectCount()
                             .from(INVENTORY)
                             .where(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
