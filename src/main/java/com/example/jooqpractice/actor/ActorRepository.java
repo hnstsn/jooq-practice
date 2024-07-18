@@ -9,6 +9,7 @@ import org.jooq.generated.tables.JFilmActor;
 import org.jooq.generated.tables.daos.ActorDao;
 import org.jooq.generated.tables.pojos.Actor;
 import org.jooq.generated.tables.pojos.Film;
+import org.jooq.generated.tables.records.ActorRecord;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
@@ -92,4 +93,60 @@ public class ActorRepository {
         }
         return field.like("%" + inputValue + "%");
     }
+
+    public Actor saveByDao(Actor actor) {
+        actorDao.insert(actor);     // 이때 PK(actorId)가 actor 객체에 추가됨
+        return actor;
+    }
+
+    public ActorRecord saveByRecord(Actor actor) {
+        ActorRecord actorRecord = dslContext.newRecord(ACTOR, actor);
+        actorRecord.insert();
+        return actorRecord;
+    }
+
+    public Long saveWithReturningPk(Actor actor) {
+        return dslContext.insertInto(
+                ACTOR,
+                ACTOR.FIRST_NAME,
+                ACTOR.LAST_NAME
+            )
+            .values(
+                actor.getFirstName(),
+                actor.getLastName()
+            )
+            .returningResult(ACTOR.ACTOR_ID)
+            .fetchOneInto(Long.class);
+    }
+
+    public Actor saveWithReturningActor(Actor actor) {
+        return dslContext.insertInto(
+                ACTOR,
+                ACTOR.FIRST_NAME,
+                ACTOR.LAST_NAME
+            )
+            .values(
+                actor.getFirstName(),
+                actor.getLastName()
+            )
+            .returning(ACTOR.fields())
+            .fetchOneInto(Actor.class);
+    }
+
+    public void bulkInsert(List<Actor> actorList) {
+        var rows = actorList.stream()
+                    .map(actor -> DSL.row(
+                            actor.getFirstName(),
+                            actor.getLastName()
+                    )).toList();
+
+        dslContext.insertInto(
+                ACTOR,
+                ACTOR.FIRST_NAME,
+                ACTOR.LAST_NAME
+            )
+            .valuesOfRows(rows)
+            .execute();
+    }
+
 }
