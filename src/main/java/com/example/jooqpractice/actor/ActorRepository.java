@@ -12,12 +12,15 @@ import org.jooq.generated.tables.pojos.Film;
 import org.jooq.generated.tables.records.ActorRecord;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.example.jooqpractice.util.jooq.JooqListConditionUtil.inIfNotEmpty;
 import static org.jooq.generated.tables.JActor.ACTOR;
+import static org.jooq.impl.DSL.noField;
+import static org.jooq.impl.DSL.val;
 
 
 @Repository
@@ -147,6 +150,56 @@ public class ActorRepository {
             )
             .valuesOfRows(rows)
             .execute();
+    }
+
+
+    public Actor findByActorId(Long actorId) {
+        return actorDao.findById(actorId);
+    }
+
+    public void update(Actor actor) {
+        actorDao.update(actor);
+    }
+
+    public int updateWithDto(Long actorId, ActorUpdateRequest request) {
+        // 필드를 선택적으로 update 되도록
+        var firstName = StringUtils.hasText(request.getFirstName()) ? val(request.getFirstName()) : noField(ACTOR.FIRST_NAME);
+        var lastName  = StringUtils.hasText(request.getLastName())  ? val(request.getLastName())  : noField(ACTOR.LAST_NAME);
+
+        return dslContext.update(ACTOR)
+                    .set(ACTOR.FIRST_NAME, firstName)
+                    .set(ACTOR.LAST_NAME, lastName)
+                    .where(ACTOR.ACTOR_ID.eq(actorId))
+                    .execute();
+    }
+
+    public int updateWithRecord(Long actorId, ActorUpdateRequest request) {
+        ActorRecord record = dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
+
+        if (StringUtils.hasText(request.getFirstName())) {
+            record.setFirstName(request.getFirstName());
+        }
+
+        if (StringUtils.hasText(request.getLastName())) {
+            record.setLastName(request.getLastName());
+        }
+
+        return dslContext.update(ACTOR)
+                .set(record)
+                .where(ACTOR.ACTOR_ID.eq(actorId))
+                .execute();
+    }
+
+    public int delete(Long actorId) {
+//        actorDao.deleteById(actorId);
+        return dslContext.deleteFrom(ACTOR)
+                    .where(ACTOR.ACTOR_ID.eq(actorId))
+                    .execute();
+    }
+
+    public int deleteWithActiveRecord(Long actorId) {
+        ActorRecord record = dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
+        return record.delete();
     }
 
 }
