@@ -174,6 +174,7 @@ public class ActorRepository {
     }
 
     public int updateWithRecord(Long actorId, ActorUpdateRequest request) {
+//        var record = dslContext.newRecord(ACTOR);
         ActorRecord record = dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
 
         if (StringUtils.hasText(request.getFirstName())) {
@@ -188,6 +189,9 @@ public class ActorRepository {
                 .set(record)
                 .where(ACTOR.ACTOR_ID.eq(actorId))
                 .execute();
+        // 또는
+        // record.setActorId(actorId);
+        // return record.update();
     }
 
     public int delete(Long actorId) {
@@ -200,6 +204,15 @@ public class ActorRepository {
     public int deleteWithActiveRecord(Long actorId) {
         ActorRecord record = dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
         return record.delete();
+//        ActorRecord actorRecord = dslContext.newRecord(ACTOR);
+//        actorRecord.setActorId(actorId);
+//        return actorRecord.delete();
     }
 
+
+    /* Active Record 사용 - dslContext을 무조건 사용 */
+
+    public ActorRecord findRecordByActorId(Long actorId) {
+        return dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
+    }
 }
